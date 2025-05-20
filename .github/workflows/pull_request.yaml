@@ -1,6 +1,7 @@
 name: Pull Request Checks
 
-on: 
+on:
+  workflow_dispatch:
   pull_request:
     paths-ignore:
       - 'LICENSE'
