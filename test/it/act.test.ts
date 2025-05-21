@@ -47,32 +47,29 @@ describe("list", () => {
   });
 });
 
-(process.platform === "linux" ? describe : describe.skip)("run", () => {
-  test("run with job", async () => {
+(process.platform === "linux" ? describe : describe)("run", () => {
+  test.only("run with job", async () => {
     const act = new Act();
     const output = await act
       .setSecret("SECRET1", "secret1")
       .setEnv("ENV1", "env")
-      .runJob("push1", { workflowFile: resources, cwd: __dirname });
+      .runJob("push1", { workflowFile: resources, logFile: `${__dirname}/logs/runWithJob.log` });
+
+      console.log(output);
 
     expect(output).toMatchObject([
-      {
-        name: "Main echo \"push 1\"",
-        status: 0,
-        output: "push 1",
-      },
-      {
-        name: "Main secrets",
-        output: "***",
-        status: 0,
-      },
-      {
-        name: "Main env",
-        output: "env",
-        status: 0,
-      },
-      { name: "Main pass", status: 0, output: "pass" },
-      { name: "Main fail", status: 1, output: "fail" },
+      { name: 'Set up job', status: 0, output: '' },
+      { name: 'Main echo push 1', status: -1, output: '' },
+      { status: 0, output: 'push 1' },
+      { name: 'Main secrets', status: -1, output: '' },
+      { status: 0, output: 'secrets' },
+      { name: 'Main env', status: -1, output: '' },
+      { status: 0, output: 'some env' },
+      { name: 'Main pass', status: -1, output: '' },
+      { status: 0, output: 'pass' },
+      { name: 'Main fail', status: -1, output: '' },
+      { status: 1, output: 'fail' },
+      { name: 'Complete job', status: 0, output: '' }
     ]);
   });
 
