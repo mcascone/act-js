@@ -57,6 +57,7 @@ describe("list", () => {
 
       console.log(output);
 
+    // this is the actual output of the job, it has some bugs
     expect(output).toMatchObject([
       { name: 'Set up job', status: 0, output: '' },
       { name: 'Main echo push 1', status: -1, output: '' },
